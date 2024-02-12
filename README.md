@@ -68,7 +68,7 @@ You had to following these step below for developing this application:
     php artisan migrate
     ```
 
-    <small>Reference: [https://laravel.com/docs/10.x/#creating-a-laravel-project](https://laravel.com/docs/10.x/#creating-a-laravel-project)</small>
+    <small>Reference: [https://laravel.com/docs/10.x/#databases-and-migrations](https://laravel.com/docs/10.x/#databases-and-migrations)</small>
 
 
 6. Seed the database:
@@ -87,19 +87,19 @@ You had to following these step below for developing this application:
     php artisan serve
     ```
 
+    <small>Reference: [https://laravel.com/docs/10.x/#creating-a-laravel-project](https://laravel.com/docs/10.x/#creating-a-laravel-project)</small>
+
 8. Initialize the apps
 
-    ```
-    php artisan tinker
+    ` php artisan tinker`
 
-    -> $user = new App\Models\User
-    -> $user->name = "admin"
-    -> $user->email = "admin@admin.com"
-    -> $user->password = bcrypt("admin")
-    -> $user->level = "super_admin"
-    -> $user->is_admin = 1
-    -> $user->save()
-    ```
+    `$user = new App\Models\User`
+    `$user->name = "admin"`
+    `$user->email = "admin@admin.com"`
+    `$user->password = bcrypt("admin")`
+    `$user->level = "super_admin"`
+    `$user->is_admin = 1`
+    `$user->save()`
 
 10. Done
 
