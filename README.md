@@ -68,7 +68,7 @@ You had to following these step below for developing this application:
     php artisan migrate
     ```
 
-    <small>Reference: [https://laravel.com/docs/8.x/migrations#introduction](https://laravel.com/docs/8.x/migrations#introduction)</small>
+    <small>Reference: [https://laravel.com/docs/10.x/#creating-a-laravel-project](https://laravel.com/docs/10.x/#creating-a-laravel-project)</small>
 
 
 6. Seed the database:
@@ -77,7 +77,7 @@ You had to following these step below for developing this application:
     php artisan db:seed
     ```
 
-    <small>Reference: [https://laravel.com/docs/8.x/seeding#introduction](https://laravel.com/docs/8.x/seeding#introduction](https://laravel.com/docs/10.x/seeding#main-content)</small>
+    <small>Reference: [https://laravel.com/docs/10.x/seeding](https://laravel.com/docs/10.x/seeding)</small>
 
 7. Serve the web apps
 
