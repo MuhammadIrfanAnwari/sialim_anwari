@@ -96,25 +96,25 @@ You had to following these step below for developing this application:
     ```
 
     ```bash
-   $user = new App\Models\User
+    $user = new App\Models\User
     ```
     ```bash
-   $user->name = "admin"
+    $user->name = "admin"
     ```
     ```bash
-   $user->email = "admin@admin.com"
+    $user->email = "admin@admin.com"
     ```
-    ```bash$
-   user->password = bcrypt("admin")
+    ```bash
+    $user->password = bcrypt("admin")
     ```
     ```bash
     $user->level = "super_admin"
     ```
-    ```bash$
-   user->is_admin = 1
+    ```bash
+    $user->is_admin = 1
     ```
     ```bash
-   $user->save()
+    $user->save()
     ```
 
 10. Done
