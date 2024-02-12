@@ -91,15 +91,31 @@ You had to following these step below for developing this application:
 
 8. Initialize the apps
 
-    ``` php artisan tinker```
+    ```bash
+    php artisan tinker
+    ```
 
-    ```$user = new App\Models\User```
-    ```$user->name = "admin"```
-    ```$user->email = "admin@admin.com"```
-    ```$user->password = bcrypt("admin")```
-    ```$user->level = "super_admin"```
-    ```$user->is_admin = 1```
-    ```$user->save()```
+    ```bash
+   $user = new App\Models\User
+    ```
+    ```bash
+   $user->name = "admin"
+    ```
+    ```bash
+   $user->email = "admin@admin.com"
+    ```
+    ```bash$
+   user->password = bcrypt("admin")
+    ```
+    ```bash
+    $user->level = "super_admin"
+    ```
+    ```bash$
+   user->is_admin = 1
+    ```
+    ```bash
+   $user->save()
+    ```
 
 10. Done
 
