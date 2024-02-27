@@ -15,6 +15,7 @@
   <!-- Template CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
 </head>
 
 <body>
@@ -37,13 +38,13 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Nama User" name="name" id="nama" value="{{Auth::user()->name}}" required>
+                    <input type="text" class="form-control" placeholder="Nama User" name="name" value="{{Auth::user()->name}}" required>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="input-group">
-                    <input type="email" class="form-control" placeholder="Email User" name="email" id="email" value="{{Auth::user()->email}}" required>
+                    <input type="email" class="form-control" placeholder="Email User" name="email" value="{{Auth::user()->email}}" required>
                 </div>
               </div>
 
@@ -67,6 +68,61 @@
       </div>
     </div>
   </div>
+
+  @if (Auth::user()->level == 'super_admin')
+    <div class="modal modal-centered fade" id="modal-setting" tabindex="-1" role="dialog" aria-labelledby="title-setting" aria-hidden="true" data-mdb-backdrop="false">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="title-setting">Setting</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form  id="setting-form" method="post" action="{{route('initialization.update', App\Models\tampilan::orderBy('id', 'desc')->first()->id)}}" enctype="multipart/form-data">
+                @csrf
+                @method('put')
+                <div class="form-group">
+                      <label>Nama Perguruan Tinggi</label>
+                      <input type="text" class="form-control" placeholder="Nama Perguruan Tinggi" name="nama_pt" value="{{App\Models\tampilan::orderBy('id', 'desc')->first()->nama_pt}}" required>
+                </div>
+
+                <div class="text-center">
+                  <img src="{{asset('assets/img/logo/'.App\Models\tampilan::orderBy('id', 'desc')->first()->logo_sialim)}}" class="max-wh">
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="file" class="custom-file-input" id="logo_sialim" tabindex="1" name="logo_sialim" autofocus>
+                    <label class="custom-file-label" for="logo_sialim" aria-describedby="autofocus">Logo SIALIM</label>
+                  </div>
+                </div>
+
+                <div class="mx-auto mb-3" style="width: 200px">
+                  <img src="{{asset('assets/img/logo/'.App\Models\tampilan::first()->logo_kecil)}}" class="max-wh">
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="file" class="custom-file-input" id="logo_kecil" tabindex="1" name="logo_kecil" autofocus>
+                    <label class="custom-file-label" for="logo_kecil" aria-describedby="autofocus">Logo Kecil</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-lable">No WA Penanggung Jawab</label>
+                    <input type="text" class="form-control" tabindex="1" name="no_wa" value="{{App\Models\tampilan::orderBy('id', 'desc')->first()->no_wa}}" autofocus>
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" form="setting-form">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
 
 
   <div id="app">
@@ -93,9 +149,14 @@
               <a href="features-activities.html" class="dropdown-item has-icon">
                 <i class="fas fa-bolt"></i> Activities
               </a>
-              <a href="features-settings.html" class="dropdown-item has-icon">
-                <i class="fas fa-cog"></i> Settings
-              </a>
+              @if (Auth::user()->level == 'super_admin')
+              <button class="dropdown-item has-icon"
+                  type="button" 
+                  data-toggle="modal" 
+                  data-target="#modal-setting">
+                  <i class="fas fa-cog"></i> Settings
+              </button>
+              @endif
               <div class="dropdown-divider"></div>
               <a href="{{route('logout')}}" class="dropdown-item has-icon text-danger">
                 <i class="fas fa-sign-out-alt"></i> Logout
@@ -107,10 +168,14 @@
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="index.html">SIALIM</a>
+            <a href="{{route('dashboard')}}">
+              <img src="{{asset('assets/img/logo/'.App\Models\tampilan::orderBy('id', 'desc')->first()->logo_sialim)}}" class="max-wh">
+            </a>
           </div>
           <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">S</a>
+            <a href="{{route('dashboard')}}">
+              <img src="{{asset('assets/img/logo/'.App\Models\tampilan::orderBy('id', 'desc')->first()->logo_kecil)}}" class="max-wh">
+            </a>
           </div>
             @include("partial.menu")
         </aside>

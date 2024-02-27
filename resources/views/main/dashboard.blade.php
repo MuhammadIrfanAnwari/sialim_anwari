@@ -6,6 +6,36 @@
 
 @section('kontent')
   <section class="section">
+    @if ($message = Session::get('success'))
+            <div class="alert alert-success alert-dismissible show fade">
+                <div class="alert-body">
+                  <button class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                  </button>
+                  {{$message}}
+                </div>
+              </div>
+        @elseif ($message = Session::get('danger'))
+            <div class="alert alert-danger alert-dismissible show fade">
+                <div class="alert-body">
+                <button class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+                {{$message}}
+                </div>
+            </div>
+        @elseif($errors->any())
+            @foreach($errors->all() as $error)
+              <div class="alert alert-danger alert-dismissible show fade">
+                <div class="alert-body">
+                <button class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+                {{$error}}
+                </div>
+              </div>
+            @endforeach
+        @endif
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
         <div class="card card-statistic-2">
@@ -134,7 +164,8 @@
                     </div>
                     <div class="media-title">{{$row->judul}}</div>
                     <div class="m-0"><p class="h-4 m-0">Privasi : {{$row->privasi}}</p></div>
-                    <div class="m-0"><p class="h-4 m-0">Alasan : {{$row->alasan}}</p></div>
+                    {{-- @dd($row->validasi) --}}
+                    <div class="m-0"><p class="h-4 m-0">Alasan : {{$row->validasi[0]->alasan}}</p></div>
                     <div class="m-0"><p class="h-4 m-0">Publisher : {{$row->user->name}}</p></div>
                   </div>
                 </li>

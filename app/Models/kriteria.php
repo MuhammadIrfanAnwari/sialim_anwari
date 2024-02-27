@@ -12,4 +12,8 @@ class kriteria extends Model
     use SoftDeletes;
 
     protected $fillable = ['singkatan', 'nama_kriteria', 'deskripsi'];
+
+    function sub_kriteria(){
+        return $this->hasMany(sub_kriteria::class, 'id_kriteria', 'id')->orderBy('nama_sub_kriteria', 'asc');
+    }
 }

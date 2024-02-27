@@ -3,11 +3,12 @@
 @push('css')
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css">
 @endpush
 
 @section('kontent')
 <div class="modal modal-centered fade" id="modal-user" tabindex="-1" role="dialog" aria-labelledby="title-user" aria-hidden="true" data-mdb-backdrop="false">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="title-user">Modal title</h5>
@@ -21,33 +22,49 @@
               <input type="hidden" name="id" id="id_user">
               
               <div class="form-group">
+                <label for="name" class="form-lable">Name Tamu</label>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Nama User" name="name" id="name" required>
                 </div>
               </div>
 
               <div class="form-group">
+                <label for="email_user" class="form-lable">Email Tamu</label>
                 <div class="input-group">
                     <input type="email" class="form-control" placeholder="Email User" name="email" id="email_user" required>
                 </div>
               </div>
 
               <div class="form-group">
+                <label for="masa_berlaku" class="form-lable">Masa Berlaku</label>
                 <div class="input-group">
-                    <input type="password" class="form-control" placeholder="Password User" name="password">
+                    
+                    <input type="date" class="form-control" placeholder="Batas Waktu" name="masa_berlaku" id="masa_berlaku" required>
                 </div>
               </div>
 
-              <div class="form-group">
-                <div class="input-group">
-                    <select class="form-control select-level" name="level" id="select-level"><option></option></select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="input-group">
-                    <select class="form-control select-bagian" name="id_bagian" id="select-bagian"><option></option></select>
-                </div>
+            <div class="wrap-table">
+                <table class="table table-striped table-hover" id="table-izin" style="width:100%">
+                    <thead style="width: 100%">
+                        <tr>
+                            <th width="20px">#</th>
+                            <th>Nama</th>
+                            <th>bagian</th>
+                            <th>kriteria</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        @foreach ($dokumen as $dok => $row)
+                            <tr>
+                                <td><input type="checkbox" value="{{$row->id}}" id="cb-{{$row->id}}" name="id_dokumen[]"></td>
+                                <td>{{$row->judul}}</td>
+                                <td>{{$row->bagian->nama_bagian}}</td>
+                                <td>{{$row->sub_kriteria->kriteria->nama_kriteria}}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                  </table>
               </div>
             </form>
         </div>
@@ -61,7 +78,7 @@
 
     <div class="card card-primary p-3">
         <div class="card-header">
-            <h1>User</h1> <hr>
+            <h1>Perizinan</h1> <hr>
         </div>
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible show fade">
@@ -99,14 +116,14 @@
           </button>
 
           <div class="wrap-table">
-            <table class="table table-striped table-hover" style="width:100%">
+            <table class="table table-striped table-hover" id="table-user" style="width:100%">
               <thead>
                 <tr>
                   <th class="text-center">#</th>
                   <th class="text-center">Nama User</th>
                   <th class="text-center">email</th>
                   <th class="text-center">level</th>
-                  <th class="text-center" width="85px"><i class="fas fa-cog"></i></th>
+                  <th class="text-center" width="150px"><i class="fas fa-cog"></i></th>
                 </tr>
               </thead>
               <tbody>
@@ -117,9 +134,12 @@
                       <td>{{$row['email']}}</td>
                       <td>{{$row['level']}}</td>
                       <td>
-                          <form action="{{route('akun.destroy', $row['id'])}}" method="post">
+                          <input type="hidden" value="Berikut adalah token hak akses : {{$row->remember_token}}" id="text-copy-{{$row->id}}">
+                          <form action="{{route('perizinan.destroy', $row['id'])}}" method="post">
                               @csrf
                               @method('delete')
+                              
+                              <button class="btn btn-info" type="button" id="button-copy-{{$row->id}}"><i class="fas fa-share-alt-square"></i></button>
                               <button type="button" 
                                     class="btn btn-primary editUser" 
                                     data-toggle="modal" 
@@ -143,8 +163,50 @@
   <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-    $('.table').dataTable({scrollX:true})
+    
     $(function(){
+    $('#table-user').dataTable({scrollX:true})
+
+    var groupColumn = 2;
+    var table = $('#table-izin').DataTable({
+        columnDefs: [{ visible: false, targets: groupColumn }],
+        order: [[groupColumn, 'asc']],
+        displayLength: 25,
+        drawCallback: function (settings) {
+            var api = this.api();
+            var rows = api.rows({ page: 'current' }).nodes();
+            var last = null;
+    
+            api.column(groupColumn, { page: 'current' })
+                .data()
+                .each(function (group, i) {
+                    if (last !== group) {
+                        $(rows)
+                            .eq(i)
+                            .before(
+                                '<tr class="group"><td colspan="5">' +
+                                    group +
+                                    '</td></tr>'
+                            );
+    
+                        last = group;
+                    }
+                });
+        },
+        scrollX:true
+    });
+    
+    // Order by the grouping
+    $('#table-izin tbody').on('click', 'tr.group', function () {
+        var currentOrder = table.order()[0];
+        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+            table.order([groupColumn, 'desc']).draw();
+        }
+        else {
+            table.order([groupColumn, 'asc']).draw();
+        }
+    });
+
       @if(Auth::user()->level == 'super_admin')
         const level = ['super_admin', 'admin', 'user', 'tamu'];
       @else
@@ -166,12 +228,20 @@
         data:bagian
       })
 
+      function uncheck(){
+        $('input:checkbox').prop('checked', false)
+      }
+
       function inputUser(input){
+        uncheck()
         $('#name').val(input.name||'')
         $('#id_user').val(input.id||'')
         $('#email_user').val(input.email||'')
-        $('.select-level').val(input.level||'').trigger('change')
-        $('.select-bagian').val(input.id_bagian||'').trigger('change')
+        $('#masa_berlaku').val(input.masa_berlaku||'')
+        for(var i = 0; i < input.perizinan.length; i++){
+          $('#cb-'+input.perizinan[i].id_dokumen).prop('checked', true)
+        }
+        
       }
 
       function addPutUser(){
@@ -182,16 +252,27 @@
         $('[name="_method"][value="PUT"]').remove();
       }
 
+      for(var i = 0; i < $('[id*=button-copy-]').length; i++){
+        var id_btn = $('[id*=button-copy-]')[i].id.split('-')[2]
+        $('#button-copy-'+id_btn).click(function(){
+          var id_text = this.id.split('-')[2]
+          console.log(id_text)
+          $('#text-copy-'+id_text).select();
+          navigator.clipboard.writeText($('#text-copy-'+id_text).val());
+          alert($('#text-copy-'+id_text).val())
+        })
+      }
+
       $('#addUser').click(function(){
         removePutUser()
         inputUser('')
-        $('#user-form').attr('action', "{{route('akun.store')}}")
+        $('#user-form').attr('action', "{{route('perizinan.store')}}")
         $('.modal-title').html('Tambah User')
       })
 
       $('.editUser').click(function(){
         let data = $(this).data('id')
-        $('#user-form').attr('action', "{{route('akun.index')}}/"+data)
+        $('#user-form').attr('action', "{{route('perizinan.index')}}/"+data)
         $('.modal-title').html('Edit User')
 
         removePutUser()
@@ -199,7 +280,7 @@
 
         $.ajax({
           type:"GET",
-          url:"{{route('akun.index')}}/"+data,
+          url:"{{route('perizinan.index')}}/"+data,
           data:"id"+data,
           results: users=>{
             const user = users.map(datauser=>{

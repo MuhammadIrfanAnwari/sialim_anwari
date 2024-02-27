@@ -24,4 +24,8 @@ class dokumen extends Model
     function user(){
         return $this->belongsTo(User::class, 'id_user', 'id')->withTrashed();
     }
+
+    function validasi(){
+        return $this->hasMany(validasi::class, 'id_dokumen', 'id')->orderBy('id', 'desc');
+    }
 }

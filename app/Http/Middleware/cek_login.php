@@ -21,7 +21,7 @@ class cek_login
             if(in_array(Auth::user()->level, $levels)){
                 return $next($request);
             } else {
-                return redirect()->route('login')->with(['error'=>'Anda tidak memiliki hak akses untuk memasuki halaman ini']);
+                return redirect()->route('login')->with(['error'=>"Anda tidak memiliki izin memasuki halaman tersebut"]);
             }
         }
         return redirect()->route('login')->with(['error'=>'Anda tidak bisa masuk tanpa login']);

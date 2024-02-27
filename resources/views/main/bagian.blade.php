@@ -96,7 +96,8 @@
                       <td>{{$row['kode']}}</td>
                       <td>{{$row['nama_bagian']}}</td>
                       <td>
-                          <form action="{{route('bagian.destroy', $row['id'])}}" method="post">
+                          @if($row->id != 1)
+                            <form action="{{route('bagian.destroy', $row['id'])}}" method="post">
                               @csrf
                               @method('delete')
                               <button type="button" 
@@ -108,6 +109,7 @@
                               </button>
                               <button class="btn btn-danger" type="submit"><i class='far fa-trash-alt fa-9x' style='color:#fff'></i></button>
                           </form>
+                          @endif
                       </td>
                   </tr>
                  @endforeach

@@ -53,6 +53,12 @@
 /* 2. Mixin */
 /* 3. Bootstrap Override */
 /* 3.1 Misc */
+
+.max-wh{
+  max-width: 100%;
+  max-height: 100%;
+}
+
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,600,700,800");
 .btn:focus,
 .btn:active,

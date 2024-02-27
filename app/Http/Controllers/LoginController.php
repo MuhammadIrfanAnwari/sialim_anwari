@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
+use App\Models\tampilan;
 use Auth;
 
 class LoginController extends Controller
@@ -11,6 +13,15 @@ class LoginController extends Controller
     public function login(){
         $data['judul'] = 'SIALIM';
         $data['sub_judul'] = 'Login';
+        $tampilan = tampilan::orderBy('id', 'desc')->first();
+        if($tampilan){
+            $data['init'] = $tampilan->count();
+            $data['logo'] = $tampilan->logo_kecil;
+        }
+        
+        if(User::all()->count()==0){
+            return redirect()->route('initialization.index')->with(['error'=>'Silahkan melakukan inisialisasi terlebih dahulu!']);
+        }
         
         return view('login', $data);
     }

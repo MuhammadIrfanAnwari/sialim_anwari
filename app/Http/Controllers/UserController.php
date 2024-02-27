@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\User;
-// use Location;
+use Auth;
+use Str;
 
 class UserController extends Controller
 {
@@ -16,7 +17,10 @@ class UserController extends Controller
     {
         $data['judul'] = 'SIALIM';
         $data['sub_judul'] = "Akun";
-        $data['akuns'] = User::orderBy('id', 'desc')->get();
+        $data['akuns'] = User::where('level', '!=', 'super_admin')->where('level', '!=', 'tamu')->orderBy('id', 'desc')->get();
+        if(Auth::user()->level == 'super_admin'){
+            $data['akuns'] = User::orderBy('id', 'desc')->where('level', '!=', 'tamu')->get();
+        }
         return view('main.user', $data);
     }
 
@@ -33,15 +37,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(Location::get($request->getClientIp()));
+        if(User::where("email",'=',$request->email)->where('level', '=', 'tamu')->first()){
+            return redirect()->route('akun.index')->with(['danger'=>'Email sudah ada sebagai Tamu']);
+        }
         $data = $request->validate([
             'name'=>'required',
-            'email'=>'required',
+            'email'=>'required|unique:users',
             'password'=>'required',
-            'level'=>'required',            
+            'level'=>'required',  
+            'id_bagian'=>'required',            
         ]);
 
         $data['password'] = bcrypt($data['password']);
+        $data['remember_token'] = Str::random(32);
 
         User::create($data);
 
@@ -71,10 +79,14 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if(User::where("email",'=',$request->email)->where('level', '=', 'tamu')->first()){
+            return redirect()->route('akun.index')->with(['danger'=>'Email sudah ada sebagai Tamu']);
+        }
         $data = $request->validate([
             'name'=>'required',
-            'email'=>'required',
-            'level'=>'required',            
+            'email'=>'required|unique:users,email,'.$id.',id',
+            'level'=>'required',
+            'id_bagian'=>'required',           
         ]);
 
         if($request->password){

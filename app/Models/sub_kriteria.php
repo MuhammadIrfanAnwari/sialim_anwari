@@ -16,4 +16,8 @@ class sub_kriteria extends Model
     function kriteria(){
         return $this->belongsTo(kriteria::class, 'id_kriteria', 'id')->withTrashed();
     }
+
+    function dokumen(){
+        return $this->hasMany(dokumen::class, 'id_sub_kriteria', 'id');
+    }
 }
