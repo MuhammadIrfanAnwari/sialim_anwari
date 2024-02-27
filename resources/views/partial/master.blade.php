@@ -21,7 +21,7 @@
         @yield('login')
       <div class="d-md-flex justify-content-between p-3 bg-white">
         <div>
-          Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="">Muhamad Irfan Anwari</a>
+          Copyright &copy; 2024 <div class="bullet"></div> Design By <a href="https://github.com/MuhammadIrfanAnwari/">Muhamad Irfan Anwari</a>
         </div>
         <div>
           version 0.0.0.1

@@ -5,4 +5,67 @@
  * 
  */
 
+ .max-wh-100{
+    max-width: 100px;
+    max-height: 100px;
+    min-width: 65px;
+    min-height: 65px;
+ }
+
+ .min-wh-100{
+    min-width: 150px;
+    min-height: 150px;
+    padding-right: 30px;
+    padding-left: 30px;
+ }
+
+ .opa-brand{
+    background: rgba(255, 255, 255, 0.1);
+ }
+
+ .bg-info-custom{
+   background: rgb(132, 149, 241);
+ }
+
+ .bg-success-custom{
+   background: rgb(144, 255, 164);
+ }
+
+ .text-head-card{
+   right: 0;
+   top: 0;
+   background: rgba(220, 92, 92, 0.509);
+   padding: 12px;
+   border-radius: 0  0 0 50%;
+ }
+
+ .dokument{
+   height: 350px;
+   overflow-y: scroll;
+ }
+
+ .w-100{
+   width: 100%;
+ }
+
+ .wrap-table{
+  width: 100%;
+ }
+
+ tr.group,
+tr.group:hover {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    color: aliceblue;
+}
+ 
+:root.dark tr.group,
+:root.dark tr.group:hover {
+    background-color: rgb(0, 0, 0) !important;
+    color: aliceblue;
+}
+
+.min-card{
+  min-height: 250px;
+}
+
 /*# sourceMappingURL=custom.css.map */

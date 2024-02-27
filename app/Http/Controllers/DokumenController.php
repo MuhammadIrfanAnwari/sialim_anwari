@@ -142,14 +142,14 @@ class DokumenController extends Controller
             $downloaded['tanggal'] = date('Y-m-d');
             downloaded::create($downloaded);
 
-            return Storage::download('private/'.$dokumen['dokumen']);
+            return Storage::download('private/'.$dokumen['dokumen'], $dokumen->judul);
         } elseif($dokumen['privasi'] == 'private'){
             if (in_array(Auth::user()->level, ['admin', 'super_admin']) || $dokumen['id_user'] == Auth::user()->id) {
                 $downloaded['ip'] = \Request::ip();
                 $downloaded['id_dokumen'] = $id;
                 $downloaded['tanggal'] = date('Y-m-d');
                 downloaded::create($downloaded);
-                return Storage::download('private/'.$dokumen['dokumen']);
+                return Storage::download('private/'.$dokumen['dokumen'], $dokumen->judul);
             } else {
                 return redirect()->route('dokumen.index')->with(['danger'=>'Anda tidak diizinkan membuka file '.$dokumen['judul']]);
             }
@@ -163,6 +163,7 @@ class DokumenController extends Controller
             'alasan'=>'nullable',
             'status'=>'required',
         ]);
+        // dd($data);
         $dokumen = dokumen::find($data['id_dokumen']);
 
         if(in_array(Auth::user()->level, ['admin', 'super_admin'])){
